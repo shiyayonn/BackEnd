@@ -20,6 +20,7 @@ import com.prms.main.models.Patient;
 import com.prms.main.services.AddressServices;
 import com.prms.main.services.PatientServices;
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/patients")
 public class PatientController {
 
@@ -37,6 +38,17 @@ public class PatientController {
     public List<Patient> all() {
        return pService.listAll();
     }
+    
+    @GetMapping("/activated")
+    public List<Patient> activatedPatients() {
+       return pService.getActivated();
+    }
+    @GetMapping("/deactivated")
+    public List<Patient> deactivatedPatients() {
+       return pService.getDeactivated();
+    }
+    
+    
 
     // @GetMapping("/address")
     // public List<Address> getAddresses(){
