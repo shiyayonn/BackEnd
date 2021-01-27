@@ -26,6 +26,7 @@ import com.prms.main.repositories.PatientRepository;
 import com.prms.main.services.AddressServices;
 import com.prms.main.services.PatientServices;
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/patients")
 public class PatientController {
 	
@@ -48,6 +49,18 @@ public class PatientController {
        return pService.listAll();
     }
     
+
+    @GetMapping("/activated")
+    public List<Patient> activatedPatients() {
+       return pService.getActivated();
+    }
+    @GetMapping("/deactivated")
+    public List<Patient> deactivatedPatients() {
+       return pService.getDeactivated();
+    }
+    
+    
+
 
     //medyo redundant pero xge,,
      @GetMapping("/getAllAddress")

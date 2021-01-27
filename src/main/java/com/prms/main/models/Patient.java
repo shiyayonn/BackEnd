@@ -37,7 +37,10 @@ public class Patient {
 
 	@Column(name = "status")
 	private int status;
-
+	
+	@Column(name = "address")
+	private String address;
+	
 	public long getPatientId() {
 		return patientId;
 	}
@@ -109,6 +112,12 @@ public class Patient {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	public void setAddress(String address) {
+		this.address = address;
+		}
+		public String getAddress() {
+		return address;
+		}
 
 	public Patient(String firstName, String middleName, String lastName, String email, String contactNumber,
 			Date birthdate, String gender, int status) {
