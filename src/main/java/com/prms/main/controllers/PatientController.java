@@ -24,14 +24,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.prms.main.exporters.ExcelExporter;
 import com.prms.main.models.Address;
 import com.prms.main.models.Patient;
+import com.prms.main.repositories.AddressRepository;
 import com.prms.main.repositories.PatientRepository;
 import com.prms.main.services.AddressServices;
 import com.prms.main.services.PatientServices;
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/patients")
 @CrossOrigin(origins = "*")
 public class PatientController {
-
+	
     private PatientServices pService;
     private AddressServices aService;
     
@@ -44,6 +46,7 @@ public class PatientController {
         this.aService = aService;
     }
     
+
     @GetMapping("/getPatient/{p_id}")
     public ResponseEntity<Patient> getPatientById(@PathVariable("p_id") long p_id){
     	Optional<Patient> patientData = patientRepository.findById(p_id);
@@ -66,15 +69,73 @@ public class PatientController {
 		}
 	}
     
-    @GetMapping("/getPatient")
+
+    
+    @Autowired
+    AddressRepository AddressRepository;
+    PatientRepository PatientRepository;
+   
+    @GetMapping()
     public List<Patient> all() {
        return pService.listAll();
     }
+    
 
-    // @GetMapping("/address")
-    // public List<Address> getAddresses(){
-    //     return (List<Address>) aService.listAll();
-    // }
+    @GetMapping("/activated")
+    public List<Patient> activatedPatients() {
+       return pService.getActivated();
+    }
+    @GetMapping("/deactivated")
+    public List<Patient> deactivatedPatients() {
+       return pService.getDeactivated();
+    }
+    
+    
+
+
+    //medyo redundant pero xge,,
+     @GetMapping("/getAllAddress")
+     public List<Address> getAddresses(){
+         return (List<Address>) aService.listAll();
+     }
+     
+     
+     @PostMapping("/addAddress")
+     public ResponseEntity<Address> addAddress(@RequestBody Address address)
+     {
+    	 try {
+    		 Address _address = AddressRepository
+    				 .save(new Address(address.getAddress(), address.getPatientId()));
+    		 return new ResponseEntity<>(_address, HttpStatus.CREATED);
+    	 }
+    	 
+    	 catch (Exception e)
+    	 {
+    		 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    	 }
+
+     }
+     
+     
+//     @PostMapping("/addPatients")
+//     public ResponseEntity<Patient> addPatient(@RequestBody Patient patient) {​​
+//     try {​​
+//     Patient _patient = patientRepository
+//     .save(new Patient(patient.getFirstName(), patient.getMiddleName(), patient.getLastName(),
+//     patient.getEmail(),patient.getContactNumber(),patient.getBirthdate(),patient.getGender(),patient.getStatus()));
+//     return new ResponseEntity<>(_patient, HttpStatus.CREATED);
+//     }​​ catch (Exception e) {​​
+//     return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+//     }​​
+//     }
+     
+//     @PostMapping("/addPatients")
+//     public ResponseEntity<Patient> addPatient(@RequestBody Patient patient)​​
+//     {
+//    	 Patient _patient = PatientRepository;
+//     }
+//     
+   
 
     @GetMapping("/export")
     public void exportToExcel(HttpServletResponse response) throws IOException {

@@ -23,5 +23,15 @@ public class PatientServices {
     public List<Patient> listAll() {
         return repo.findAll();
     }
+
+    public List<Patient> getActivated() {
+        List<Patient> patients = (List<Patient>) repo.findAllActivated();
+        return patients;
+    }
+    
+    public List<Patient> getDeactivated() {
+        List<Patient> patients = (List<Patient>) repo.findAllDeactivated();
+        return patients;
+    }
      
 }
